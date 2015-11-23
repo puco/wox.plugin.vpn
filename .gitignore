@@ -1,0 +1,5 @@
+/src/packages
+/src/**/bin
+/src/**/obj
+
+*.DotSettings
