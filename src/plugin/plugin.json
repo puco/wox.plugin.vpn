@@ -1,12 +1,12 @@
 ﻿{
-  "ID":"9AC17099-BDEE-4963-928E-4B25B837A13E",
-  "ActionKeyword":"vpn",
-  "Name":"VPN",
-  "Description":"VPN connection manager",
-  "Author":"Martin Pernecky",
-  "Version":"1.0.0",
-  "Language":"csharp",
-  "Website":"https://github.com/puco/wox.plugin.vpn",
+  "ID": "9AC17099BDEE4963928E4B25B837A13E",
+  "ActionKeyword": "vpn",
+  "Name": "VPN",
+  "Description": "VPN connection manager",
+  "Author": "Martin Pernecky",
+  "Version": "1.0.0",
+  "Language": "csharp",
+  "Website": "https://github.com/puco/wox.plugin.vpn",
   "IcoPath": "Images\\app.png",
-  "ExecuteFileName":"wox.plugin.vpn.dll"
+  "ExecuteFileName": "wox.plugin.vpn.dll"
 }
