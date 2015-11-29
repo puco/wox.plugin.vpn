@@ -4,100 +4,63 @@ using System.Linq;
 using DotRas;
 using Wox.Plugin;
 
-namespace wox.plugins.vpn
+namespace wox.plugin.vpn
 {
     public class Plugin : IPlugin
     {
         private PluginInitContext _context;
 
+        private readonly ConnectionManager _connectionManager = new ConnectionManager();
+
+        public Result Transform(Connection connection, Query query)
+        {
+            var result = new Result(connection.Name)
+            {
+                IcoPath = "Images\\disconnect.png",
+            };
+
+            switch (connection.Status)
+            {
+                case RasConnectionState.Disconnected:
+                    result.IcoPath = "Images\\connect.png";
+                    result.SubTitle = "Connect to VPN";
+                    result.Action = context =>
+                    {
+                        _context.API.StartLoadingBar();
+                        connection.Connect();
+                        _context.API.StopLoadingBar();
+                        return true;
+                    };
+                    break;
+
+                case RasConnectionState.Connected:
+                    result.IcoPath = "Images\\disconnect.png";
+                    result.SubTitle = "Disconnect from VPN";
+                    result.Action = context =>
+                    {
+                        _context.API.StartLoadingBar();
+                        connection.Disconnect();
+                        _context.API.StopLoadingBar();
+                        return true;
+                    };
+                    break;
+
+                default:
+                    result.SubTitle = "Status: " + connection.Status;
+                    break;
+            }
+            return result;
+        }
+
         public IEnumerable<Result> EnumerateResults(Query query)
         {
-            var phoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.User);
+            Func<Connection, bool> filter = e => true;
 
-            var activeConnections = RasConnection.GetActiveConnections();
-
-            Func<RasEntry, bool> filter = e => true;
-
-            if (!String.IsNullOrEmpty(query.FirstSearch))
+            if (!string.IsNullOrEmpty(query.FirstSearch))
                 filter = e => e.Name.Contains(query.FirstSearch);
 
-            using (var phoneBook = new RasPhoneBook())
-            {
-                phoneBook.Open(phoneBookPath);
-
-                foreach (var e in phoneBook.Entries.Where(filter))
-                {
-                    var connection = activeConnections.FirstOrDefault(a => a.EntryName == e.Name);
-                    if (connection != null)
-                    {
-                        yield return new Result(e.Name)
-                        {
-                            IcoPath = "Images\\disconnect.png",
-                            SubTitle = "Disconnect from VPN",
-                            ContextData = connection,
-                            Action = context =>
-                            {
-                                _context.API.StartLoadingBar();
-                                connection.HangUp();
-                                _context.API.StopLoadingBar();
-                                _context.API.ChangeQuery(String.Empty);
-                                return true;
-                            }
-                        };
-                    }
-                    else
-                    {
-                        var credentials = e.GetCredentials();
-
-                        yield return new Result(e.Name)
-                        {
-                            IcoPath = "Images\\connect.png",
-                            SubTitle = "Connect to VPN",
-                            Action = context =>
-                            {
-                                _context.API.StartLoadingBar();
-                                _context.API.ChangeQueryText(e.Name);
-                                var dialer = new RasDialer
-                                {
-                                    EntryName = e.Name,
-                                    PhoneBookPath = phoneBookPath,
-                                    Credentials = credentials
-                                };
-
-                                var connected = false;
-
-                                dialer.StateChanged += (sender, args) =>
-                                {
-                                    _context.API.PushResults(query, _context.CurrentPluginMetadata, new List<Result>
-                                    {
-                                        new Result {Title = args.State.ToString()}
-                                    });
-                                };
-
-
-                                dialer.DialCompleted += (sender, args) =>
-                                {
-                                    _context.API.PushResults(query, _context.CurrentPluginMetadata, new List<Result>
-                                    {
-                                        new Result {Title = "Connected: " + args.Connected.ToString()}
-                                    });
-                                    if (args.Connected)
-                                        connected = true;
-                                };
-
-                                dialer.Dial();
-
-                                _context.API.StopLoadingBar();
-
-                                _context.API.ChangeQuery(String.Empty);
-                                return connected;
-                            }
-                        };
-                    }
-
-                }
-            }
-
+            foreach (var e in _connectionManager.EnumerateConnections().Where(filter))
+                yield return Transform(e, query);
         }
 
         public List<Result> Query(Query query)

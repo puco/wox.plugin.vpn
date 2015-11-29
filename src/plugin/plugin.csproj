@@ -7,8 +7,8 @@
     <ProjectGuid>{FD99329A-45DF-47AC-84C2-4A5EF225B0D6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>wox.plugins.vpn</RootNamespace>
-    <AssemblyName>wox.plugins.vpn</AssemblyName>
+    <RootNamespace>wox.plugin.vpn</RootNamespace>
+    <AssemblyName>wox.plugin.vpn</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -35,21 +35,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotRas, Version=1.3.5166.33430, Culture=neutral, PublicKeyToken=b378f04384b7892a, processorArchitecture=MSIL">
-      <HintPath>packages\DotRas.for.Win8.1.3.0\lib\net20\DotRas.dll</HintPath>
+      <HintPath>..\packages\DotRas.for.Win8.1.3.0\lib\net20\DotRas.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Wox.Plugin, Version=1.2.0.486, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Wox.Plugin.1.2.0.486\lib\net35\Wox.Plugin.dll</HintPath>
+      <HintPath>..\packages\Wox.Plugin.1.2.0.486\lib\net35\Wox.Plugin.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection.cs" />
+    <Compile Include="ConnectionManager.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,7 +69,7 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

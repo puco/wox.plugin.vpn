@@ -6,7 +6,7 @@
   "Author":"Martin Pernecky",
   "Version":"1.0.0",
   "Language":"csharp",
-  "Website":"https://github.com/puco/wox.plugins.vpn",
+  "Website":"https://github.com/puco/wox.plugin.vpn",
   "IcoPath": "Images\\app.png",
-  "ExecuteFileName":"wox.plugins.vpn.dll"
+  "ExecuteFileName":"wox.plugin.vpn.dll"
 }
