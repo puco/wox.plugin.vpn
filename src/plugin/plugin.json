@@ -4,7 +4,7 @@
   "Name": "VPN",
   "Description": "VPN connection manager",
   "Author": "Martin Pernecky",
-  "Version": "1.0.0",
+  "Version": "1.1.1",
   "Language": "csharp",
   "Website": "https://github.com/puco/wox.plugin.vpn",
   "IcoPath": "Images\\app.png",

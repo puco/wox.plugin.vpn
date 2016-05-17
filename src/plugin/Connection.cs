@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Net;
-using System.Security.Cryptography;
 using DotRas;
 
 namespace wox.plugin.vpn
 {
-    public class Connection
+    public sealed class Connection
     {
-        private readonly RasEntry _entry;
-
         public RasConnectionState Status { get; set; }
 
         public string Name { get; set; }
@@ -20,8 +17,7 @@ namespace wox.plugin.vpn
 
         public Connection(RasEntry entry, RasConnection rasConnection = null)
         {
-            _entry = entry;
-            _networkCredential = _entry.GetCredentials();
+            _networkCredential = entry.GetCredentials();
             SetConnected(rasConnection);
         }
 
@@ -36,7 +32,7 @@ namespace wox.plugin.vpn
         public void Connect()
         {
             if (ConnectionManager.PhoneBookPath == null)
-                throw new Exception("Phonebookpath is nukk");
+                throw new Exception("Phonebookpath is null");
 
             var dialer = new RasDialer
             {
@@ -60,7 +56,7 @@ namespace wox.plugin.vpn
             _rasConnection.HangUp();
         }
 
-        protected virtual void OnStateChanged()
+        private void OnStateChanged()
         {
             StateChanged?.Invoke(this, EventArgs.Empty);
         }

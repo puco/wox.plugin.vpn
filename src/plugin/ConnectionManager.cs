@@ -8,7 +8,7 @@ namespace wox.plugin.vpn
     {
         public static readonly string PhoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.User);
 
-        public IEnumerable<Connection> EnumerateConnections()
+        public static IEnumerable<Connection> EnumerateConnections()
         {
             var activeConnections = RasConnection.GetActiveConnections();
 

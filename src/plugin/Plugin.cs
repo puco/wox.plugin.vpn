@@ -10,13 +10,12 @@ namespace wox.plugin.vpn
     {
         private PluginInitContext _context;
 
-        private readonly ConnectionManager _connectionManager = new ConnectionManager();
-
-        public Result Transform(Connection connection, Query query)
+        private Result Transform(Connection connection)
         {
-            var result = new Result(connection.Name)
+            var result = new Result
             {
-                IcoPath = "Images\\disconnect.png",
+                Title = connection.Name,
+                IcoPath = "Images\\disconnect.png"
             };
 
             switch (connection.Status)
@@ -52,15 +51,16 @@ namespace wox.plugin.vpn
             return result;
         }
 
-        public IEnumerable<Result> EnumerateResults(Query query)
+        private IEnumerable<Result> EnumerateResults(Query query)
         {
             Func<Connection, bool> filter = e => true;
 
             if (!string.IsNullOrEmpty(query.FirstSearch))
                 filter = e => e.Name.Contains(query.FirstSearch);
 
-            foreach (var e in _connectionManager.EnumerateConnections().Where(filter))
-                yield return Transform(e, query);
+            return ConnectionManager.EnumerateConnections()
+                .Where(filter)
+                .Select(Transform);
         }
 
         public List<Result> Query(Query query)
